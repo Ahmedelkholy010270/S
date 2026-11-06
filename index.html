@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>متجر الهوديهات الفاخرة | تيك زون</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Cairo) -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <script>
@@ -42,9 +45,10 @@
 </head>
 <body class="antialiased font-sans">
 
+    <!-- Navbar -->
     <nav class="glass-panel sticky top-0 z-40 px-6 py-4 flex justify-between items-center shadow-lg">
         <div class="text-2xl font-bold gold-gradient-text">
-            <i class="fa-solid fa-crown mr-2"></i> متجر هودي
+            <i class="fa-solid fa-crown mr-2"></i> تيك زون
         </div>
         <button onclick="toggleCart()" class="relative text-gold-400 text-2xl hover:text-gold-500 transition">
             <i class="fa-solid fa-bag-shopping"></i>
@@ -52,13 +56,18 @@
         </button>
     </nav>
 
+    <!-- Hero -->
     <header class="text-center py-12 px-4">
         <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-white">تشكيلة الشتاء <span class="gold-gradient-text">الفاخرة</span></h1>
         <p class="text-gray-400 max-w-xl mx-auto text-lg">اختر الموديل، حدد لونك المفضل، وأضف لمستك بالطباعة المخصصة.</p>
     </header>
 
-    <main class="container mx-auto px-4 pb-20" id="products-container"></main>
+    <!-- Products Container -->
+    <main class="container mx-auto px-4 pb-20" id="products-container">
+        <!-- سيتم توليد المنتجات هنا -->
+    </main>
 
+    <!-- Cart Sidebar -->
     <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="toggleCart()"></div>
     <div id="cart-sidebar" class="fixed top-0 h-full w-full md:w-96 glass-panel z-50 flex flex-col shadow-2xl">
         <div class="p-6 border-b border-gray-700 flex justify-between items-center">
@@ -82,66 +91,68 @@
         </div>
     </div>
 
+    <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg opacity-0 pointer-events-none z-50">
         تمت الإضافة إلى السلة بنجاح!
     </div>
 
     <script>
+        // هنا هتقوم بتعديل اسم الصورة لكل لون بالاسم الصحيح الخاص بيها من جيت هاب
         const productsData = [
             { 
                 id: 1, 
                 name: 'هودي كلاسيك مقفول', 
                 price: 500, 
-                defaultImg: 'c-black.jpg',
+                defaultImg: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg', 
                 colors: [
-                    { name: 'أسود', hex: '#1a1a1a', img: 'c-black.jpg' },
-                    { name: 'كحلي', hex: '#3b4b5e', img: 'c-navy.jpg' },
-                    { name: 'أزرق', hex: '#26598c', img: 'c-blue.jpg' },
-                    { name: 'بيج', hex: '#d4c4b7', img: 'c-beige.jpg' },
-                    { name: 'بني', hex: '#5b453e', img: 'c-brown.jpg' },
-                    { name: 'بينك', hex: '#e9aab6', img: 'c-pink.jpg' }
+                    { name: 'أسود', hex: '#1a1a1a', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'كحلي', hex: '#3b4b5e', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'أزرق', hex: '#26598c', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'بيج', hex: '#d4c4b7', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'بني', hex: '#5b453e', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'بينك', hex: '#e9aab6', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' }
                 ]
             },
             { 
                 id: 2, 
                 name: 'هودي بسوستة', 
                 price: 600, 
-                defaultImg: 'z-black.jpg',
+                defaultImg: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg',
                 colors: [
-                    { name: 'أسود', hex: '#1a1a1a', img: 'z-black.jpg' },
-                    { name: 'بني', hex: '#5b453e', img: 'z-brown.jpg' },
-                    { name: 'زيتي', hex: '#4c5243', img: 'z-olive.jpg' },
-                    { name: 'بيج', hex: '#c5b49f', img: 'z-beige.jpg' },
-                    { name: 'رصاصي', hex: '#9ca3af', img: 'z-gray.jpg' },
-                    { name: 'أزرق', hex: '#26598c', img: 'z-blue.jpg' }
+                    { name: 'أسود', hex: '#1a1a1a', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'بني', hex: '#5b453e', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'زيتي', hex: '#4c5243', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'بيج', hex: '#c5b49f', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'رصاصي', hex: '#9ca3af', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'أزرق', hex: '#26598c', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' }
                 ]
             },
             { 
                 id: 3, 
                 name: 'سويت شيرت راوند', 
                 price: 500, 
-                defaultImg: 'r-black.jpg',
+                defaultImg: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg',
                 colors: [
-                    { name: 'أسود', hex: '#1a1a1a', img: 'r-black.jpg' },
-                    { name: 'بني', hex: '#5b453e', img: 'r-brown.jpg' },
-                    { name: 'رصاصي', hex: '#9ca3af', img: 'r-gray.jpg' },
-                    { name: 'أزرق', hex: '#26598c', img: 'r-blue.jpg' },
-                    { name: 'أوف وايت', hex: '#f0ede6', img: 'r-offwhite.jpg' },
-                    { name: 'لبني', hex: '#b0c4de', img: 'r-lightblue.jpg' }
+                    { name: 'أسود', hex: '#1a1a1a', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'بني', hex: '#5b453e', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'رصاصي', hex: '#9ca3af', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'أزرق', hex: '#26598c', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'أوف وايت', hex: '#f0ede6', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'لبني', hex: '#b0c4de', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' }
                 ]
             },
             { 
                 id: 4, 
                 name: 'شروال وايد ليج', 
                 price: 450, 
-                defaultImg: 'p-black.jpg',
+                defaultImg: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg',
                 colors: [
-                    { name: 'أسود', hex: '#1a1a1a', img: 'p-black.jpg' },
-                    { name: 'رصاصي', hex: '#9ca3af', img: 'p-gray.jpg' },
-                    { name: 'بني', hex: '#5b453e', img: 'p-brown.jpg' },
-                    { name: 'زيتي', hex: '#4c5243', img: 'p-olive.jpg' },
-                    { name: 'بيج', hex: '#c5b49f', img: 'p-beige.jpg' },
-                    { name: 'أزرق', hex: '#26598c', img: 'p-blue.jpg' }
+                    { name: 'أسود', hex: '#1a1a1a', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'رصاصي', hex: '#9ca3af', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'بني', hex: '#5b453e', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'زيتي', hex: '#4c5243', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'بيج', hex: '#c5b49f', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' },
+                    { name: 'أزرق', hex: '#26598c', img: 'WhatsApp Image 2026-11-06 at 6.18.59 PM (1).jpeg' }
                 ]
             }
         ];
@@ -195,7 +206,7 @@
                             </div>
                         </div>
 
-                        <!-- إخفاء خيار الطباعة فقط للبنطلون -->
+                        <!-- إخفاء خيار الطباعة من البناطيل فقط -->
                         ${product.id !== 4 ? `
                         <div class="mb-6 p-4 border border-gray-700 rounded-xl bg-dark-800 bg-opacity-50">
                             <label class="flex items-center cursor-pointer gap-3 mb-3">
