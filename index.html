@@ -26,7 +26,7 @@
     </script>
     
     <style>
-        body { background-color: #0a0a0a; color: #f3f4f6; }
+        body { background-color: #0a0a0a; color: #f3f4f6; overflow-x: hidden; }
         .glass-panel { background: rgba(31, 41, 55, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(251, 191, 36, 0.15); }
         .gold-gradient-text { background: linear-gradient(to right, #FBBF24, #FDE68A); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .btn-gold { background: linear-gradient(to right, #D97706, #FBBF24); color: #000; font-weight: bold; transition: all 0.3s; }
@@ -39,9 +39,14 @@
         ::-webkit-scrollbar-track { background: #111827; }
         ::-webkit-scrollbar-thumb { background: #D97706; border-radius: 10px; }
 
-        /* سلة المشتريات */
-        #cart-sidebar { transition: transform 0.3s ease-in-out; }
-        .translate-x-full-rtl { transform: translateX(100%); }
+        /* تعديل سلة المشتريات لتكون متوافقة مع كل المتصفحات */
+        #cart-sidebar { 
+            right: -100%; 
+            transition: right 0.4s ease-in-out; 
+        }
+        #cart-sidebar.open {
+            right: 0;
+        }
         
         /* اشعار التنبيه */
         #toast { transition: opacity 0.3s, transform 0.3s; }
@@ -73,14 +78,13 @@
 
     <!-- سلة المشتريات (Sidebar) -->
     <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="toggleCart()"></div>
-    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-96 glass-panel z-50 transform translate-x-full-rtl flex flex-col shadow-2xl">
+    <div id="cart-sidebar" class="fixed top-0 h-full w-full md:w-96 glass-panel z-50 flex flex-col shadow-2xl">
         <div class="p-6 border-b border-gray-700 flex justify-between items-center">
             <h2 class="text-2xl font-bold gold-gradient-text">سلة المشتريات</h2>
             <button onclick="toggleCart()" class="text-gray-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
         
         <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
-            <!-- عناصر السلة تظهر هنا -->
             <div class="text-center text-gray-500 mt-10" id="empty-cart-msg">السلة فارغة حالياً</div>
         </div>
 
@@ -103,7 +107,7 @@
     </div>
 
     <script>
-        // --- 1. بيانات المنتجات الأساسية ---
+        // --- بيانات المنتجات الأساسية ---
         const productsData = [
             { id: 1, name: 'هودي كلاسيك فاخر', price: 500, img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80' },
             { id: 2, name: 'هودي أوفر سايز', price: 500, img: 'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?auto=format&fit=crop&w=600&q=80' },
@@ -119,18 +123,16 @@
 
         const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
 
-        // حالة المتجر والسلة
         let cart = [];
-        let productStates = {}; // لتخزين اختيارات المستخدم لكل منتج قبل الإضافة للسلة
+        let productStates = {}; 
 
-        // --- 2. توليد المنتجات في الصفحة ---
+        // --- توليد المنتجات في الصفحة ---
         function renderProducts() {
             const container = document.getElementById('products-container');
             container.innerHTML = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>';
             const grid = container.firstChild;
 
             productsData.forEach(product => {
-                // تهيئة حالة المنتج
                 productStates[product.id] = { color: null, size: null, withPrint: false, printText: '' };
 
                 const card = document.createElement('div');
@@ -194,23 +196,17 @@
             });
         }
 
-        // --- 3. إدارة اختيارات المنتج ---
         function selectOption(productId, type, value, buttonElement) {
             productStates[productId][type] = value;
-            
-            // إزالة التحديد من الأزرار الأخرى في نفس المجموعة
             const container = document.getElementById(`${type}s-${productId}`);
             const buttons = container.querySelectorAll(type === 'color' ? '.swatch' : '.size-btn');
             buttons.forEach(btn => btn.classList.remove('selected'));
-            
-            // إضافة التحديد للزر الحالي
             buttonElement.classList.add('selected');
         }
 
         function togglePrint(productId, isChecked) {
             productStates[productId].withPrint = isChecked;
             const inputContainer = document.getElementById(`print-input-container-${productId}`);
-            
             if (isChecked) {
                 inputContainer.classList.remove('hidden');
             } else {
@@ -224,11 +220,8 @@
             productStates[productId].printText = text;
         }
 
-        // --- 4. وظائف السلة ---
         function addToCart(productId) {
             const state = productStates[productId];
-            
-            // التحقق من الاختيارات
             if (!state.color || !state.size) {
                 alert('الرجاء اختيار اللون والمقاس أولاً!');
                 return;
@@ -238,15 +231,11 @@
                 return;
             }
 
-            // إيجاد بيانات المنتج الأصلية
             const product = productsData.find(p => p.id === productId);
-            
-            // حساب السعر النهائي للقطعة
             const finalPrice = state.withPrint ? product.price + 50 : product.price;
 
-            // إضافة للسلة
             cart.push({
-                cartId: Date.now(), // ID فريد للعنصر في السلة
+                cartId: Date.now(),
                 name: product.name,
                 color: state.color,
                 size: state.size,
@@ -265,9 +254,7 @@
         }
 
         function updateCartUI() {
-            // تحديث العدد في الـ Navbar
             document.getElementById('cart-count').innerText = cart.length;
-
             const cartItemsContainer = document.getElementById('cart-items');
             const emptyMsg = document.getElementById('empty-cart-msg');
             const totalElement = document.getElementById('cart-total');
@@ -280,10 +267,8 @@
                 emptyMsg.style.display = 'block';
             } else {
                 emptyMsg.style.display = 'none';
-                
                 cart.forEach(item => {
                     total += item.price;
-                    
                     const itemDiv = document.createElement('div');
                     itemDiv.className = 'bg-dark-800 p-4 rounded-xl border border-gray-700 relative';
                     itemDiv.innerHTML = `
@@ -300,23 +285,22 @@
                     cartItemsContainer.appendChild(itemDiv);
                 });
             }
-
             totalElement.innerText = total + ' ج.م';
         }
 
-        // --- 5. واجهة المستخدم والتوجيه للواتساب ---
         function toggleCart() {
             const sidebar = document.getElementById('cart-sidebar');
             const overlay = document.getElementById('cart-overlay');
             
-            sidebar.classList.toggle('translate-x-full-rtl');
+            // إضافة وتفعيل الكلاس الجديد للظهور والإخفاء
+            sidebar.classList.toggle('open');
             
-            if (sidebar.classList.contains('translate-x-full-rtl')) {
-                overlay.classList.add('hidden');
-                document.body.style.overflow = 'auto';
-            } else {
+            if (sidebar.classList.contains('open')) {
                 overlay.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
+            } else {
+                overlay.classList.add('hidden');
+                document.body.style.overflow = 'auto';
             }
         }
 
@@ -324,7 +308,6 @@
             const toast = document.getElementById('toast');
             toast.style.opacity = '1';
             toast.style.transform = 'translate(-50%, -20px)';
-            
             setTimeout(() => {
                 toast.style.opacity = '0';
                 toast.style.transform = 'translate(-50%, 0)';
@@ -337,7 +320,6 @@
                 return;
             }
 
-            // تجميع نص الرسالة
             let message = "أهلاً بك، أريد طلب المنتجات التالية من المتجر:\n\n";
             let total = 0;
 
@@ -355,12 +337,10 @@
 
             message += `\n💰 *الإجمالي النهائي: ${total} ج.م*`;
 
-            // الرقم مع كود الدولة الصحيح
             const phone = "201038400110"; 
             const encodedMessage = encodeURIComponent(message);
             const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
 
-            // التوجيه المباشر في نفس الصفحة لتفادي حظر المتصفح
             window.location.href = whatsappUrl; 
         }
 
